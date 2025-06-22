@@ -21,12 +21,15 @@ export const getMessages = async (req, res) => {
     const { id: userToChatId } = req.params;
     const myId = req.user._id;
 
+    const count = await Message.coun;
     const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: userToChatId },
         { senderId: userToChatId, receiverId: myId },
       ],
-    });
+    }).sort({"createdAt" : -1}).limit(80);
+    // console.log(Message.countDocuments())
+    messages.reverse()
 
     res.status(200).json(messages);
   } catch (error) {
