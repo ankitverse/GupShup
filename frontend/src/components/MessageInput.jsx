@@ -86,22 +86,36 @@ const MessageInput = () => {
             onChange={handleImageChange}
           />
 
+          {/* IMAGE BUTTON */}
           <button
             type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+            className={`
+      btn btn-circle
+      ${imagePreview ? "hidden" : "flex"}      /* hide on mobile when preview exists */
+      sm:flex                                   /* always show on desktop */
+      btn-xs sm:btn-sm md:btn-md
+      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}
+  `}
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
           </button>
-        </div>
-        <button
-          type="submit"
-          className="btn btn-sm btn-circle"
-          disabled={!text.trim() && !imagePreview}
-        >
-          <Send size={22} />
-        </button>
+          </div>
+
+          {/* SEND BUTTON */}
+          <button
+            type="submit"
+            className={`
+      btn btn-circle 
+      ${imagePreview ? "flex" : "hidden"}       /* show only on mobile when preview exists */
+      sm:flex                                   /* always show on desktop */
+      btn-xs sm:btn-sm md:btn-md
+  `}
+            disabled={!text.trim() && !imagePreview}
+          >
+            <Send size={22} />
+          </button>
+
       </form>
     </div>
   );
