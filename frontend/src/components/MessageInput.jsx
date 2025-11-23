@@ -90,31 +90,30 @@ const MessageInput = () => {
           <button
             type="button"
             className={`
-      btn btn-circle
-      ${imagePreview ? "hidden" : "flex"}      /* hide on mobile when preview exists */
-      sm:flex                                   /* always show on desktop */
-      btn-xs sm:btn-sm md:btn-md
+      btn btn-circle btn-xs sm:btn-sm md:btn-md
+      button-switch
+      ${text.trim() || imagePreview ? "button-hide hidden" : "button-show flex"}
+      sm:button-show
       ${imagePreview ? "text-emerald-500" : "text-zinc-400"}
   `}
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
           </button>
-          </div>
-
-          {/* SEND BUTTON */}
-          <button
-            type="submit"
-            className={`
-      btn btn-circle 
-      ${imagePreview ? "flex" : "hidden"}       /* show only on mobile when preview exists */
-      sm:flex                                   /* always show on desktop */
-      btn-xs sm:btn-sm md:btn-md
+        </div>
+        {/* SEND BUTTON */}
+        <button
+          type="submit"
+          className={`
+      btn btn-circle btn-xs sm:btn-sm md:btn-md
+      button-switch
+      ${text.trim() || imagePreview ? "button-show flex" : "button-hide hidden"}
+      sm:button-show
   `}
-            disabled={!text.trim() && !imagePreview}
-          >
-            <Send size={22} />
-          </button>
+          disabled={!text.trim() && !imagePreview}
+        >
+          <Send size={22} />
+        </button>
 
       </form>
     </div>
