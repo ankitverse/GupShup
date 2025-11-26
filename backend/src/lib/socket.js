@@ -27,7 +27,7 @@ const userSocketMap = {}; // {userId: socketId}
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
   // console.log(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=1721734458&text=She+is+online+boss`);
-  fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=1721734458&text=She+is+online+boss`).then(
+  fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=1721734458&text=SomeOne+Joined`).then(
     console.log("message sent to telegram")
   );
   const userId = socket.handshake.query.userId;
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);
-    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=1721734458&text=Oops+She+went+offline!!!!`);
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=1721734458&text=Oops+Someone+Left!!!!`);
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });

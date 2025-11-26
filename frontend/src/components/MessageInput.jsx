@@ -8,6 +8,8 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
+  const [sendingImage, setSendingImage] = useState(false);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -29,23 +31,27 @@ const MessageInput = () => {
   };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!text.trim() && !imagePreview) return;
+  e.preventDefault();
+  if (!text.trim() && !imagePreview) return;
 
-    try {
-      await sendMessage({
-        text: text.trim(),
-        image: imagePreview,
-      });
+  try {
+    setSendingImage(true); // <-- start animation
 
-      // Clear form
-      setText("");
-      setImagePreview(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (error) {
-      console.error("Failed to send message:", error);
-    }
-  };
+    await sendMessage({
+      text: text.trim(),
+      image: imagePreview,
+    });
+
+    // Clear form
+    setText("");
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  } catch (error) {
+    console.error("Failed to send message:", error);
+  } finally {
+    setSendingImage(false); // <-- stop animation
+  }
+};
 
   return (
     <div className="p-4 w-full">
@@ -55,17 +61,30 @@ const MessageInput = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className={`w-20 h-20 object-cover rounded-lg border border-zinc-700 
+      transition-all duration-300
+      ${sendingImage ? "opacity-40 blur-[1px]" : "opacity-100"}
+    `}
             />
-            <button
-              onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
-              type="button"
-            >
-              <X className="size-3" />
-            </button>
+
+            {/* Loading Spinner */}
+            {sendingImage && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="loading loading-spinner loading-sm text-primary"></span>
+              </div>
+            )}
+
+            {!sendingImage && (
+              <button
+                onClick={removeImage}
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300 flex items-center justify-center"
+                type="button"
+              >
+                <X className="size-3" />
+              </button>
+            )}
           </div>
+
         </div>
       )}
 
@@ -114,6 +133,8 @@ const MessageInput = () => {
         >
           <Send size={22} />
         </button>
+
+        
 
       </form>
     </div>
